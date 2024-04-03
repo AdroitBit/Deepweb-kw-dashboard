@@ -1,6 +1,7 @@
 import yaml
 import os
 import requests
+import re
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # Configure SOCKS proxy (replace with your actual SOCKS proxy settings)
@@ -19,7 +20,10 @@ def main():
             continue
         print(f'Request to {link_collector_url} successful!')
         link_collector_text = link_collector_page.text
-        print(link_collector_text)
+        pattern = r"http(.*)(\s|\r|\n)"
+        for link in re.findall(pattern, link_collector_text):
+            print(link)
+        # print(link_collector_text)
 
 if __name__ == "__main__":
     main()
