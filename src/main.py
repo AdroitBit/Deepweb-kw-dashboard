@@ -10,7 +10,11 @@ proxies = {
     'https': 'socks5h://127.0.0.1:9050'
 }
 
+
 def main():
+    unvisited_links = []
+    visited_links = []
+    found_keywords_links = set()
     with open("onion_links/collectionors.yaml", "r") as f:
         data = yaml.safe_load(f)
     for link_collector_url in data:
@@ -23,7 +27,19 @@ def main():
         pattern = r"(http)(.+)(\n|\r|\s)"
         for link in re.findall(pattern, link_collector_text):
             link = ''.join(link).strip()
-            print(link)
+            unvisited_links.append(link)
+
+    visit_depth = 1
+    # need to 
+    for link in unvisited_links:
+        if link in visited_links:
+            continue
+        visited_links.append(link)
+        print(link)
+
+
+
+
         # print(link_collector_text)
 
 if __name__ == "__main__":
