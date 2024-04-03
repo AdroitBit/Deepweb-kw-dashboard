@@ -20,7 +20,7 @@ def main():
             continue
         print(f'Request to {link_collector_url} successful!')
         link_collector_text = link_collector_page.text
-        pattern = r"http(.*)(\s|\r|\n)"
+        pattern = r"(http)(.+)(\n|\r|\s)"
         for link in re.findall(pattern, link_collector_text):
             print(link)
         # print(link_collector_text)
