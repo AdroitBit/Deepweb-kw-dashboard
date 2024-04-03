@@ -22,6 +22,7 @@ def main():
         link_collector_text = link_collector_page.text
         pattern = r"(http)(.+)(\n|\r|\s)"
         for link in re.findall(pattern, link_collector_text):
+            link = ''.join(link).strip()
             print(link)
         # print(link_collector_text)
 
