@@ -16,7 +16,9 @@ onion_url = "http://breachdbsztfykg2fdaq2gnqnxfsbj5d35byz3yzj73hazydk4vq72qd.oni
 
 # Make a GET request using the SOCKS proxy
 # response = requests.post(onion_url, proxies=proxies)
-response = requests.post(onion_url, proxies=proxies)
+response = requests.post(onion_url, proxies=proxies,data={
+    'email':'yanothai.c@ku.th'
+})
 
 # Check if the request was successful (status code 200)
 if response.status_code == 200:
