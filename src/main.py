@@ -10,6 +10,10 @@ proxies = {
     'https': 'socks5h://127.0.0.1:9050'
 }
 
+visiting_links = []
+visited_links = []
+
+
 
 def main():
     unvisited_links = []

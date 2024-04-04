@@ -1,0 +1,41 @@
+collectioners:
+  # - {
+  #   url : "https://raw.githubusercontent.com/gt0day/DarkWeb/main/README.md",
+  #   method : "GET",
+  #   params : ""
+  # }
+  # - {
+  #   url : "https://onionengine.com/search.php",
+  #   method : "GET",
+  #   params : {
+  #     search: "contact info leaks",
+  #   }
+  # }
+  # - {
+  #   url : "https://onionengine.com/search.php",
+  #   method : "GET",
+  #   params : {
+  #     search: "ku.ac.th",
+  #   }
+  # }
+  # - {
+  #   url : "https://onionengine.com/search.php",
+  #   method : "GET",
+  #   params : {
+  #     search: "ku.th",
+  #   }
+  # }
+  # - {
+  #   url : "https://onionengine.com/search.php",
+  #   method : "GET",
+  #   params : {
+  #     search: "kasetsart",
+  #   }
+  # }
+  - {
+    url : "http://breachdbsztfykg2fdaq2gnqnxfsbj5d35byz3yzj73hazydk4vq72qd.onion/",
+    method : "POST",
+    params : {
+
+    }
+  }
