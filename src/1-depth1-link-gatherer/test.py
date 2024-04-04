@@ -36,7 +36,7 @@ form_data = {
 }
 
 # Send the POST request
-response = requests.post(onion_url, data=form_data)
+response = requests.post(onion_url, data=form_data,proxies=proxies)
 
 
 # Check if the request was successful (status code 200)
