@@ -24,15 +24,15 @@ onion_url = "http://breachdbsztfykg2fdaq2gnqnxfsbj5d35byz3yzj73hazydk4vq72qd.oni
 
 
 form_data = {
-    '__VIEWSTATE': '__VIEWSTATE_value',
-    '__VIEWSTATEGENERATOR': '94D56744',
-    '__EVENTVALIDATION': '__EVENTVALIDATION_value',
-    'ctl00$ContentPlaceHolder1$TxtSearch': 'search_term',
-    'ctl00$ContentPlaceHolder1$SearchType': 'Email',  # Or 'Username' depending on the search type
-    'ctl00$ContentPlaceHolder1$ChkShowPass': 'on',  # If the checkbox is checked
-    'ctl00$ContentPlaceHolder1$ChkShowAll': 'on',  # If the checkbox is checked
-    'ctl00$ContentPlaceHolder1$HiddenJS': 'Enable',
-    'ctl00$ContentPlaceHolder1$BtnSearch': 'Search'
+    # '__VIEWSTATE': '__VIEWSTATE_value',
+    # '__VIEWSTATEGENERATOR': '94D56744',
+    # '__EVENTVALIDATION': '__EVENTVALIDATION_value',
+    # 'ctl00$ContentPlaceHolder1$TxtSearch': 'search_term',
+    # 'ctl00$ContentPlaceHolder1$SearchType': 'Email',  # Or 'Username' depending on the search type
+    # 'ctl00$ContentPlaceHolder1$ChkShowPass': 'on',  # If the checkbox is checked
+    # 'ctl00$ContentPlaceHolder1$ChkShowAll': 'on',  # If the checkbox is checked
+    # 'ctl00$ContentPlaceHolder1$HiddenJS': 'Enable',
+    # 'ctl00$ContentPlaceHolder1$BtnSearch': 'Search'
 }
 
 # Send the POST request
