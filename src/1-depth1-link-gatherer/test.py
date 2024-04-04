@@ -16,11 +16,28 @@ onion_url = "http://breachdbsztfykg2fdaq2gnqnxfsbj5d35byz3yzj73hazydk4vq72qd.oni
 
 # Make a GET request using the SOCKS proxy
 # response = requests.post(onion_url, proxies=proxies)
-response = requests.post(onion_url, proxies=proxies,data={
-    'ctl00$ContentPlaceHolder1$TxtSearch':'yanothai.c@ku.th',
-    "ctl00$ContentPlaceHolder1$SearchType":'Email',
-    "ctl00$ContentPlaceHolder1$ChkShowAll":True,
-})
+# response = requests.post(onion_url, proxies=proxies,data={
+#     'ctl00$ContentPlaceHolder1$TxtSearch':'yanothai.c@ku.th',
+#     "ctl00$ContentPlaceHolder1$SearchType":'Email',
+#     "ctl00$ContentPlaceHolder1$ChkShowAll":True,
+# })
+
+
+form_data = {
+    '__VIEWSTATE': '__VIEWSTATE_value',
+    '__VIEWSTATEGENERATOR': '94D56744',
+    '__EVENTVALIDATION': '__EVENTVALIDATION_value',
+    'ctl00$ContentPlaceHolder1$TxtSearch': 'search_term',
+    'ctl00$ContentPlaceHolder1$SearchType': 'Email',  # Or 'Username' depending on the search type
+    'ctl00$ContentPlaceHolder1$ChkShowPass': 'on',  # If the checkbox is checked
+    'ctl00$ContentPlaceHolder1$ChkShowAll': 'on',  # If the checkbox is checked
+    'ctl00$ContentPlaceHolder1$HiddenJS': 'Enable',
+    'ctl00$ContentPlaceHolder1$BtnSearch': 'Search'
+}
+
+# Send the POST request
+response = requests.post(onion_url, data=form_data)
+
 
 # Check if the request was successful (status code 200)
 if response.status_code == 200:
