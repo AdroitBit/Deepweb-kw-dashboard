@@ -1,3 +1,4 @@
+import re
 from typing import Dict, List
 import requests
 from schema import DeepWebInfo
@@ -20,13 +21,13 @@ def pull_via_onion_search_engine(keywords: List[str]):
             if response.status_code==200:
                 print("Request successful!")
                 print("Response content:")
-                print(response.text)
+                response_text=response.text
+                for url in re.findall(r"https?://\S+", response_text):
+                    r[keyword].append(url)
+                # print(response.text)
             else:
                 print("Failed to make the request. Status code:", response.status_code)
     return r
-
-
-    return {}
 
 def pull_in_link_container():
     pass
@@ -43,4 +44,4 @@ def merge_dicts(*dict_args: Dict[str, List[str]]) -> Dict[str, List[str]]:
 
 
 if __name__=='__main__':
-    print(pull_via_onion_search_engine(["drugs", "guns", "hitman"]))
+    print(pull_via_onion_search_engine(["drug", "guns", "hitman"]))
