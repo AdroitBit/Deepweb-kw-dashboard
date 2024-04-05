@@ -22,8 +22,8 @@ def pull_via_onion_search_engine(keywords: List[str]):
                 print("Request successful!")
                 print("Response content:")
                 response_text=response.text
-                for url in re.findall(r"https?://\S+", response_text):
-                    r[keyword].append(url)
+                for url_in_page in re.findall(r"(http)(.*)(\.onion)", response_text):
+                    r[keyword].append(url_in_page)
                 # print(response.text)
             else:
                 print("Failed to make the request. Status code:", response.status_code)
