@@ -23,6 +23,7 @@ def pull_via_onion_search_engine(keywords: List[str]):
                 print("Response content:")
                 response_text=response.text
                 for url_in_page in re.findall(r"(http)(.*)(\.onion)", response_text):
+                    url_in_page="".join(url_in_page)
                     r[keyword].append(url_in_page)
                 # print(response.text)
             else:
