@@ -1,15 +1,38 @@
-version: '2'
-
+version: '3.4'
 networks:
-  my_network:
+  obfs4_bridge_external_network:
     driver: bridge
 
 services:
+  # obfs4-bridge:
+  #   image: thetorproject/obfs4-bridge:latest
+  #   networks:
+  #     - obfs4_bridge_external_network
+  #   environment:
+  #     - OR_PORT=${OR_PORT:?Env var OR_PORT is not set.}
+  #     - PT_PORT=${PT_PORT:?Env var PT_PORT is not set.}
+  #     - EMAIL = ${EMAIL:?Env var EMAIL is not set.}
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - data:/var/lib/tor
+  #   ports:
+  #     - "${OR_PORT}:${OR_PORT}"
+  #     - "${PT_PORT}:${PT_PORT}"
+  #   restart: unless-stopped
+  socks5_server:
+    image: dockage/shadowsocks-server:latest
+    ports:
+      - '8388:8388'
+    environment:
+      - SS_PASSWORD=ssp@ss
+      - SS_METHOD=aes-256-cfb
   deepweb_puller:
     container_name: deepweb-puller
     build:
       context: ./apps/deepweb-puller
       dockerfile: Dockerfile
+    restart: 'always'
     # networks:
     #   - my_network
 
@@ -31,4 +54,6 @@ services:
   #     - '--config.file=/etc/prometheus/prometheus.yml'
   #   ports:
   #     - '9090:9090'
-  
+volumes:
+  data:
+    name: tor-datadir-${OR_PORT}-${PT_PORT}

@@ -4,15 +4,27 @@ import requests
 from schema import DeepWebInfo
 
 
-proxies = {
-    'http': 'socks5h://127.0.0.1:9050',
-    'https': 'socks5h://127.0.0.1:9050'
-}
+# proxies = {
+#     'http': 'socks5h://localhost:9050',
+#     'https': 'socks5h://localhost:9050'
+# }
 
 # proxies = {
-#     'http': 'socks5://127.0.0.1:9050',
-#     'https': 'socks5://127.0.0.1:9050'
+#     'http': 'socks5://localhost:9050',
+#     'https': 'socks5://localhost:9050'
 # }
+
+# proxies = {
+#     'http': 'socks5h://localhost:9050',
+#     'https': 'socks5h://localhost:9050'
+# }
+
+
+
+proxies = {
+    'http': 'socks5h://127.0.0.1:8388',
+    'https': 'socks5h://127.0.0.1:8388'
+}
 
 def pull_via_search_engine_deepweb(keywords: List[str]):
     r:Dict[str,List[str]]={}
@@ -59,10 +71,10 @@ if __name__=='__main__':
 
 
     import requests
-    # url="https://check.torproject.org/"
-    url="http://drugszus4tg3ompbp7lpnnbkjfzctmfjhornjnmr5csi5vkvhqyznwqd.onion/"
-    response=requests.get(url)
-    # response=requests.get(url,proxies=proxies)
+    url="https://check.torproject.org/"
+    # url="http://drugszus4tg3ompbp7lpnnbkjfzctmfjhornjnmr5csi5vkvhqyznwqd.onion/"
+    # response=requests.get(url)
+    response=requests.get(url,proxies=proxies)
     print(response.text)
     # from requests_tor import RequestsTor
     # # rt= RequestsTor()
@@ -70,3 +82,24 @@ if __name__=='__main__':
     # url="https://check.torproject.org/"
     # response=rt.get(url)
     # print(response.text)
+
+
+# from stem.control import Controller
+
+# def check_tor_status():
+#     try:
+#         with Controller.from_port(port=9050) as controller:
+#             controller.authenticate()
+#             if controller.is_authenticated():
+#                 return "Tor service is running."
+#             else:
+#                 return "Tor service is not running or authentication failed."
+#     except Exception as e:
+#         return f"Error checking Tor status: {str(e)}"
+
+# if __name__ == "__main__":
+#     print(check_tor_status())
+#     # while True:
+#     #     print(check_tor_status())
+#     #     import time
+#     #     time.sleep(2)

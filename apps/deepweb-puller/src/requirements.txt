@@ -2,3 +2,4 @@ requests
 requests[socks]
 pydantic
 requests-tor
+stem
