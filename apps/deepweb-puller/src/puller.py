@@ -59,9 +59,10 @@ if __name__=='__main__':
 
 
     import requests
-    url="https://check.torproject.org/"
-    # response=requests.get(url)
-    response=requests.get(url,proxies=proxies)
+    # url="https://check.torproject.org/"
+    url="http://drugszus4tg3ompbp7lpnnbkjfzctmfjhornjnmr5csi5vkvhqyznwqd.onion/"
+    response=requests.get(url)
+    # response=requests.get(url,proxies=proxies)
     print(response.text)
     # from requests_tor import RequestsTor
     # # rt= RequestsTor()
