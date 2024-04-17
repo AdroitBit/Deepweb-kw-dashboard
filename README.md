@@ -16,17 +16,20 @@ As CSI Linux docker image is not available yet.`<br>`
 To build this repo into docker and run its application image`<br>`
 
 ```
-docker compose up --build
 
 
-# Build this repo to application image
-docker build -t deepweb-scraper:latest .
+# start docker engine
+sudo systemctl start docker # on linux. Or run docker desktop on windows
 
-# remove old container
-docker rm -f deepweb-scraper-container
+# Uncompose 
+docker compose down
 
-# Run docker container
-<!-- docker run -it -d --name deepweb-scraper-container -p 8080:80 deepweb-scraper:latest -->
-docker run -it -d --name deepweb-scraper-container deepweb-scraper:latest
+# Compose this repo into container and run
+docker compose up --build --force-recreate # this will run in foreground
+
+or 
+
+docker compose up -d --build --force-recreate  # for detached mode
+
 
 ```

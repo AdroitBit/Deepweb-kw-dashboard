@@ -1,59 +1,73 @@
 version: '3.4'
+
 networks:
-  obfs4_bridge_external_network:
+  my_network:
     driver: bridge
 
 services:
-  # obfs4-bridge:
-  #   image: thetorproject/obfs4-bridge:latest
-  #   networks:
-  #     - obfs4_bridge_external_network
-  #   environment:
-  #     - OR_PORT=${OR_PORT:?Env var OR_PORT is not set.}
-  #     - PT_PORT=${PT_PORT:?Env var PT_PORT is not set.}
-  #     - EMAIL = ${EMAIL:?Env var EMAIL is not set.}
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - data:/var/lib/tor
-  #   ports:
-  #     - "${OR_PORT}:${OR_PORT}"
-  #     - "${PT_PORT}:${PT_PORT}"
-  #   restart: unless-stopped
-  socks5_server:
-    image: dockage/shadowsocks-server:latest
+  tor_proxy:
+    container_name: tor_proxy
+    # restart: always
+    image: dperson/torproxy
+    networks:
+      - my_network
     ports:
-      - '8388:8388'
-    environment:
-      - SS_PASSWORD=ssp@ss
-      - SS_METHOD=aes-256-cfb
+      - "9050:9050"
+      - "9053:9053"
+      - "9051:9051"
   deepweb_puller:
-    container_name: deepweb-puller
+    container_name: deepweb_puller
     build:
       context: ./apps/deepweb-puller
       dockerfile: Dockerfile
-    restart: 'always'
-    # networks:
-    #   - my_network
+    # restart: 'always'
+    networks:
+      - my_network
+  
+  server_api:
+    container_name: server_api
+    build:
+      context: ./apps/server-api
+      dockerfile: Dockerfile
+    # restart: 'on-failure'
+    ports:
+      - '5000:5000'
+    networks:
+      - my_network
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    # restart: always
+    volumes:
+      - ./apps/server-api/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - '9090:9090'
+    networks:
+      - my_network
 
-
-  # server-api:
-  #   container_name: server-api
-  #   build:
-  #     context: ./apps/server-api
-  #     dockerfile: Dockerfile
-  #   restart: 'on-failure'
-  #   ports:
-  #     - '5000:5000'
-  # prometheus:
-  #   image: prom/prometheus:latest
-  #   restart: always
-  #   volumes:
-  #     - ./apps/server-api/prometheus.yml:/etc/prometheus/prometheus.yml
-  #   command:
-  #     - '--config.file=/etc/prometheus/prometheus.yml'
-  #   ports:
-  #     - '9090:9090'
-volumes:
-  data:
-    name: tor-datadir-${OR_PORT}-${PT_PORT}
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - "6969:3000"
+    environment:
+      - GF_AUTH_BASIC_ENABLED=false
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+  grafana-dashboards:
+    container_name: grafana-dashboards
+    image: alpine:3.10
+    depends_on:
+      - grafana
+    volumes:
+      - ./grafana-data:/grafana
+    command: >
+      /bin/sh -c "
+        apk add --no-cache curl
+        echo 'waiting for grafana'
+        sleep 5s
+        cd /grafana
+        curl --request POST http://grafana:6969/api/datasources --header 'Content-Type: application/json' -d @datasources.json
+        curl --request POST http://grafana:6969/api/dashboards/db --header 'Content-Type: application/json' -d @dashboard.json"

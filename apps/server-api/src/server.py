@@ -1,9 +1,10 @@
-from typing import Dict, List
+from typing import Dict, List, Set, Tuple
 from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import prometheus_client
 import uvicorn
+from schema import DeepWebInfo
 
 
 app = FastAPI()
@@ -16,45 +17,42 @@ app.add_middleware(
 )
 
 
-deepweb_info_appear_count = prometheus_client.Counter(
-    "deepweb_info_amount_appear",
-    "Amount of times the keyword appears in the deep web",
-    labelnames=["keyword", "appear_count"],
+keyword_and_urls:Dict[str,Set[str]] = {}
+
+keyword_and_urls_gauge = prometheus_client.Gauge(
+    "keyword_and_urls_gauge",
+    "Gauge of the amount of urls per keyword",
+    labelnames=["keyword"],
+)
+
+keyword_and_urls_histogram = prometheus_client.Histogram(
+    "keyword_and_urls_histogram",
+    "Histogram of the amount of urls per keyword",
+    labelnames=["keyword"],
+    buckets=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+)
+
+urls_lister = prometheus_client.Counter(
+    "urls_lister",
+    "Listing urls",
+    labelnames=["url"],
 )
 
 
-deepweb_info_metrices = prometheus_client.Counter(
-    "deepweb_info_amount_appear",
-    "Amount of times the keyword appears in the deep web",
-    labelnames=["keyword", "url"],
-)
 
-
-# deepweb_info_amount_appear = prometheus_client.Counter(
-#     "",
-#     "Amount of times the keyword appears in the deep web",
-#     labelnames=["keyword", "url"],
-# )
-
-# deepweb_info_amount_appear = prometheus_client.Summary(
-#     "deepweb_info_processing_seconds",
-#     "Time taken to process deep web information",
-#     labelnames=["keyword", "url"],
-# )
-
-
-class DeepWebInfo(BaseModel):
-    keyword_and_url: Dict[str, List[str]]
 
 @app.post("/push-deepweb-info")
-async def push_deepweb_info(request: DeepWebInfo) -> dict:
-    for keyword, urls in request.keyword_and_url.items():
-        deepweb_info_appear_count.labels(keyword=keyword, appear_count=len(urls)).inc()
-        for url in urls:
-            deepweb_info_metrices.labels(keyword=keyword, url=url).inc()
+async def push_deepweb_info(request: DeepWebInfo):
+    if request.keyword not in keyword_and_urls:
+        keyword_and_urls[request.keyword] = set()
+    keyword_and_urls[request.keyword].add(request.url)
+    #update gauge
+    keyword_and_urls_gauge.labels(request.keyword).set(len(keyword_and_urls[request.keyword]))
+    #update histogram
+    keyword_and_urls_histogram.labels(request.keyword).observe(len(keyword_and_urls[request.keyword]))
+    #update counter (lister)
+    urls_lister.labels(request.url).inc()
 
-
-            print(f"Keyword: {keyword}, URL: {url}")
     return {"message": "Data received successfully!"}
 
 @app.get("/metrics")
@@ -67,3 +65,9 @@ async def get_metrics():
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=5000)
+    # try:
+    #     _server_api_ip = socket.gethostbyname('tor_proxy')
+    # except socket.gaierror:
+    #     print("Error:", "Failed to get the IP address of the tor proxy. torproxy container might not be started yet.")
+    #     sys.exit(1)
+    # uvicorn.run(app, )

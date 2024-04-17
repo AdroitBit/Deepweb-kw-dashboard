@@ -1,5 +1,8 @@
 requests
 requests[socks]
+aiohttp
+aiohttp-socks
 pydantic
 requests-tor
 stem
+beautifulsoup4
