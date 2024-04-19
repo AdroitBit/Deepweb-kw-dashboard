@@ -1,7 +1,0 @@
-fastapi
-PyYAML
-httpx
-uvicorn
-py-grpc-prometheus
-Jinja2
-pydantic

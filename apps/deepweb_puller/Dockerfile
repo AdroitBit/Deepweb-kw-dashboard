@@ -3,20 +3,19 @@ FROM python:3.11-alpine
 
 
 ENV URL_PROCESS_CHUNK_SIZE 10
-ENV KEYWORDS "kasetsart, ku.th, ku.ac.th"
-ENV KEYWORDS "drug, porn, sex"
-ENV CHECKING_URLS_LIMIT 10000
+ENV KEYWORDS "kasetsart, ku.th, ku.ac.th, ku.th, @ku.ac.th, @ku.th, drug, porn, sex"
+ENV CHECKING_URLS_LIMIT 100000
 # FROM ubuntu:latest
 
 # Set the working directory in the container
 WORKDIR /app
 
-
+COPY ./requirements.txt /app/requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code into the container
-COPY ./src /app/
+COPY ./ .
 
 # Install dependencies
-RUN pip3 install --no-cache-dir -r requirements.txt
 
 
 

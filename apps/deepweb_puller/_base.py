@@ -11,7 +11,7 @@ import aiohttp
 import aiohttp.client_exceptions
 from aiohttp_socks import ProxyConnectionError, ProxyConnector, ProxyError, ProxyTimeoutError
 from bs4 import BeautifulSoup
-from schema import DeepWebInfo
+from schema import DeepWebInfo, PushKeyword
 
 
 class ResponseResult:
@@ -74,7 +74,7 @@ async def _request_post_on_url(url:str,data:Dict[str,Any]={},json:Dict[str,Any]=
         connector=None
     
     
-    print("performing post on",url,data)
+    print("performing post on",url,data,json)
     try:
         async with aiohttp.ClientSession(connector=connector) as session:
             if data:
@@ -84,7 +84,7 @@ async def _request_post_on_url(url:str,data:Dict[str,Any]={},json:Dict[str,Any]=
                 async with session.post(url,json=json) as response:
                     return ResponseResult(response.status,await response.read(),response.headers.get('content-type',''),url)
     except Exception as e:
-        print("Error:",str(e),url,data)
+        print("Error:",str(e),url,data,json)
         return ResponseResult()
     return ResponseResult()
 
@@ -259,18 +259,33 @@ async def push_to_server_api(keyword:str,url:URL):
     try:
         _server_api_ip = socket.gethostbyname('server_api')
     except socket.gaierror:
-        print("Error:", "Failed to get the IP address of the tor proxy. torproxy container might not be started yet.")
+        print("Error:", "Failed to get the IP address of the server_api")
         sys.exit(1)
         # return ResponseResult()
     data=DeepWebInfo(
         keyword=keyword,
         url=url.url
     )
-    response=await URL(f"http://{_server_api_ip}:5000/push-deepweb-info",use_tor=False).make_post_request(json=data.dict())
+    response=await URL(f"http://{_server_api_ip}:5000/push/deepweb-info",use_tor=False).make_post_request(json=data.dict())
     # response=await URL(f"http://localhost:5000/push-deepweb-info",use_tor=False).make_post_request(data.dict())
     # response = await URL(f"http://158.108.7.231:5000/push-deepweb-info",use_tor=False).make_post_request(data.dict())
     if response.status_code==200:
         print("Pushed to server-api with response:",response.get_text())
     else:
         print("Failed to push to server-api with response:",response.get_text())
+    return response
+
+async def declare_keyword_to_server_api(keyword:str):
+    print(f"Declare {keyword} to server-api")
+    try:
+        _server_api_ip = socket.gethostbyname('server_api')
+    except socket.gaierror:
+        print("Error:", "Failed to get the IP address of the server_api")
+        sys.exit(1)
+        # return ResponseResult()
+    response=await URL(f"http://{_server_api_ip}:5000/push/keyword",use_tor=False).make_post_request(json=PushKeyword(keyword=keyword).dict())
+    if response.status_code==200:
+        print("Declared to server-api with response:",response.get_text())
+    else:
+        print("Failed to declare to server-api with response:",response.status_code,response.get_text())
     return response

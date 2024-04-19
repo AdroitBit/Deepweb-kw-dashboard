@@ -15,6 +15,17 @@ async def main():
 
         keywords=os.getenv("KEYWORDS", "drug")
         keywords = [k.strip() for k in keywords.split(",")]
+        while True:
+            await asyncio.sleep(0)
+            is_declare_success=True
+            for keyword in keywords:
+                await asyncio.sleep(0)
+                response_result = await declare_keyword_to_server_api(keyword)
+                if response_result.status_code!=200:
+                    is_declare_success=False
+                    break
+            if is_declare_success:
+                break
         process_chunk_size = int(os.getenv("URL_PROCESS_CHUNK_SIZE", 10))
         
 

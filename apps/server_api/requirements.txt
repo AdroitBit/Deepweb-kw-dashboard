@@ -1,0 +1,8 @@
+fastapi
+PyYAML
+httpx
+uvicorn
+pydantic
+build
+toml
+psutil

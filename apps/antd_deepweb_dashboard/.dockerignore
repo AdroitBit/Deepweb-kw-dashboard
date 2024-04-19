@@ -1,0 +1,11 @@
+# Exclude temporary files
+temp/
+.vscode/
+
+# Exclude log files
+*.log
+
+# Exclude specific files
+secret.key
+
+node_modules/
