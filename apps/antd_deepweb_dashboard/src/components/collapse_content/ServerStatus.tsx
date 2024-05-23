@@ -49,11 +49,12 @@ const MonitorGauge = ({ data }: { data:DataType }) => {
 
 
 
-function ServerStatus(){
+function ServerStatus({ backend_url }: { backend_url: string }){
     const [data, setData] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch('http://localhost:5000/server_health/antd/gauge');
+            // const response = await fetch('http://localhost:5000/server_health/antd/gauge');
+            const response = await fetch(backend_url + '/server_health/antd/gauge')
             const data = await response.json();
             setData(data);
         };
@@ -63,7 +64,7 @@ function ServerStatus(){
             fetchData();
         }, 1500);
 
-    }, []);
+    }, [backend_url]);
 
     return (
         <div style={{ display: 'flex', justifyContent: 'space-around' }}>

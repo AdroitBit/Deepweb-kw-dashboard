@@ -7,11 +7,12 @@ interface DataType {
   value: number;
 }
 
-const KeywordAndAmountChart = () => {
+const KeywordAndAmountChart = ({ backend_url }: { backend_url: string }) => {
   const [data, setData] = useState<DataType[]>([]);
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('http://localhost:5000/keyword_and_urls/antd/column_chart');
+      // const response = await fetch('http://localhost:5000/keyword_and_urls/antd/column_chart');
+      const response = await fetch(backend_url + '/keyword_and_urls/antd/column_chart')
       const data = await response.json();
       setData(data);
     };
@@ -19,7 +20,7 @@ const KeywordAndAmountChart = () => {
     setInterval(() => {
       fetchData();
     }, 1500);
-  }, []);
+  }, [backend_url]);
 
   console.log(data)
   

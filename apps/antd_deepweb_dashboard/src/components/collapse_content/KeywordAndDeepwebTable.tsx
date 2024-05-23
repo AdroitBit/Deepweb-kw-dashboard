@@ -27,12 +27,13 @@ const columns: TableColumnsType<DataType> = [
 
 
 
-function KeywordAndDeepwebTable(){
+function KeywordAndDeepwebTable({ backend_url }: { backend_url: string }){
   
   const [data, setData] = useState<DataType[]>([]);
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('http://localhost:5000/keyword_and_urls/antd/table');
+      // const response = await fetch('http://localhost:5000/keyword_and_urls/antd/table');
+      const response = await fetch(backend_url + '/keyword_and_urls/antd/table')
       const data = await response.json();
       setData(data);
     };
@@ -41,7 +42,7 @@ function KeywordAndDeepwebTable(){
     setInterval(() => {
       fetchData();
     }, 1500);
-  }, []);
+  }, [backend_url]);
 
   const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
