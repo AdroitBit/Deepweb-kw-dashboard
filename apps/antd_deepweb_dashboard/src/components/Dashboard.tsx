@@ -2,9 +2,8 @@
 import KeywordAndAmountChart from './collapse_content/KeywordAndAmountChart';
 import KeywordAndDeepwebTable from './collapse_content/KeywordAndDeepwebTable.tsx';
 import ServerStatus from './collapse_content/ServerStatus.tsx';
-import { Collapse } from 'antd';
+import { Collapse, Input } from 'antd';
 import type { CollapseProps } from 'antd';
-
 
 
 
@@ -32,12 +31,17 @@ function Dashboard() {
   ];
 
   return (
-    <Collapse
-      items={items}
-      onChange={onChange}
-      defaultActiveKey={['1', '2', '3']}
-      style={{ width: "80vw" }}
-    />
+    <>
+      <Input
+        placeholder='backend url'
+      />
+      <Collapse
+        items={items}
+        onChange={onChange}
+        defaultActiveKey={['1', '2', '3']}
+        style={{ width: "80vw" }}
+      />
+    </>
   );
 }
 

@@ -8,6 +8,7 @@ function App() {
     <>
       <h3>DeepWeb Dashboard</h3>
       <Dashboard></Dashboard>
+      {/* <>{process.env.BACKEND_BASE_URL}</> */}
     </>
   )
 }

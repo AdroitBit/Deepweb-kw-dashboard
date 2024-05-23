@@ -45,6 +45,14 @@ services:
       - '5173:5173'
     networks:
       - my_network
+  
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data:/data/db
 
 
   # prometheus:
@@ -69,6 +77,18 @@ services:
   #     - GF_AUTH_BASIC_ENABLED=false
   #     - GF_AUTH_ANONYMOUS_ENABLED=true
   #     - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+
+  # influxdb:
+  #   image: influxdb:latest
+  #   container_name: influxdb
+  #   ports:
+  #     - "8086:8086"  # InfluxDB HTTP API port
+  #   environment:
+  #     - INFLUXDB_DB=mydb  # Replace 'mydb' with your desired database name
+  #     - INFLUXDB_USER=myuser  # Replace 'myuser' with your desired username
+  #     - INFLUXDB_USER_PASSWORD=mypassword  # Replace 'mypassword' with your desired password
+  #   volumes:
+  #     - influxdb_data:/var/lib/influxdb  # Volume for InfluxDB data
   # grafana_dashboards:
   #   container_name: grafana_dashboards
   #   image: alpine:3.10
@@ -84,3 +104,8 @@ services:
   #       cd /grafana
   #       # curl --request POST http://grafana:6969/api/datasources --header 'Content-Type: application/json' -d @datasources.json
   #       curl --request POST http://grafana:6969/api/dashboards/db --header 'Content-Type: application/json' -d @dashboard.json"
+
+
+volumes:
+  influxdb_data:
+    driver: local
