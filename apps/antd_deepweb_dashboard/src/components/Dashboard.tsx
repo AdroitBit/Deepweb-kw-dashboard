@@ -13,7 +13,7 @@ function Dashboard() {
   const onChange = (key: string | string[]) => {
     console.log(key);
   }
-  const [backendUrl, setBackendUrl] = useState('http://localhost:8000');
+  const [backendUrl, setBackendUrl] = useState('http://localhost:5000');
   const items: CollapseProps['items'] = [
     {
       key: '1',
@@ -22,7 +22,7 @@ function Dashboard() {
     },
     {
       key: '2',
-      label: 'Corresponding of keyword and deepweb url',
+      label: 'Table of keyword and deepweb url',
       children: <KeywordAndDeepwebTable backend_url={backendUrl}/>,
     },
     {
@@ -38,6 +38,7 @@ function Dashboard() {
         placeholder='backend url'
         onInput={(e) => { setBackendUrl(e.currentTarget.value) }}
         // onInput={(e) => console.log(e.currentTarget.value)}
+        defaultValue={backendUrl}
       />
       <Collapse
         items={items}

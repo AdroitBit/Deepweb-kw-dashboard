@@ -1,4 +1,5 @@
 import { Column } from '@ant-design/charts';
+import { Input } from 'antd';
 import { useEffect, useState } from 'react';
 
 
@@ -8,32 +9,44 @@ interface DataType {
 }
 
 const KeywordAndAmountChart = ({ backend_url }: { backend_url: string }) => {
-  const [data, setData] = useState<DataType[]>([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      // const response = await fetch('http://localhost:5000/keyword_and_urls/antd/column_chart');
-      const response = await fetch(backend_url + '/keyword_and_urls/antd/column_chart')
-      const data = await response.json();
-      setData(data);
+    const [data, setData] = useState<DataType[]>([]);
+    const [endpoint, setEndpoint] = useState('/keyword_and_urls/antd/column_chart');
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await fetch(`${backend_url}${endpoint}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const result = await response.json();
+            setData(result);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        };
+        fetchData();
+        const intervalId = setInterval(fetchData, 1500);
+        return () => clearInterval(intervalId);
+    }, [backend_url, endpoint]);
+
+    // console.log(data)
+    
+
+    const config = {
+      data,
+      xField: 'label',
+      yField: 'value',
+      height: window.innerHeight * 0.3,
+      color: '#1890ff',
     };
-    fetchData(); // initialize
-    setInterval(() => {
-      fetchData();
-    }, 1500);
-  }, [backend_url]);
 
-  console.log(data)
-  
-
-  const config = {
-    data,
-    xField: 'label',
-    yField: 'value',
-    height: window.innerHeight * 0.3,
-    color: '#1890ff',
-  };
-
-  return <Column {...config} />;
+    
+    return (
+        <>
+            <Input placeholder='endpoint' onInput={(e) => { setEndpoint(e.currentTarget.value) }} defaultValue={endpoint} />
+            <Column {...config} />
+        </>
+    )
 };
 
 export default KeywordAndAmountChart;

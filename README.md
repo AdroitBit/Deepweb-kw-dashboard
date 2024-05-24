@@ -13,7 +13,7 @@ python3 src/main.py
 
 Docker (WIP) (waiting for CSI Linux docker image)`<br>`
 As CSI Linux docker image is not available yet.`<br>`
-To build this repo into docker and run its application image`<br>`
+To build this repo into docker and run its application image `<br>`
 
 ```
 
@@ -31,5 +31,11 @@ or
 
 docker compose up -d --build --force-recreate  # for detached mode
 
+
+```
+
+PORT expose according to docker-compose.yml
+
+```
 
 ```

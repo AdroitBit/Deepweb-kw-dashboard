@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 
 import {Gauge} from '@ant-design/charts';
+import { Input } from 'antd';
 
 
 interface DataType {
@@ -51,29 +52,36 @@ const MonitorGauge = ({ data }: { data:DataType }) => {
 
 function ServerStatus({ backend_url }: { backend_url: string }){
     const [data, setData] = useState([]);
+    const [endpoint, setEndpoint] = useState('/server_health/antd/gauge');
     useEffect(() => {
         const fetchData = async () => {
-            // const response = await fetch('http://localhost:5000/server_health/antd/gauge');
-            const response = await fetch(backend_url + '/server_health/antd/gauge')
-            const data = await response.json();
-            setData(data);
+          try {
+            const response = await fetch(`${backend_url}${endpoint}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const result = await response.json();
+            setData(result);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
         };
-        fetchData(); // initialize
-
-        setInterval(() => {
-            fetchData();
-        }, 1500);
-
-    }, [backend_url]);
+        fetchData();
+        const intervalId = setInterval(fetchData, 1500);
+        return () => clearInterval(intervalId);
+    }, [backend_url, endpoint]);
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-            {
-              data.map((d: DataType) => (
-                <MonitorGauge data={d} />
-              ))
-            }
-        </div>
+        <>
+            <Input placeholder='endpoint' onInput={(e) => { setEndpoint(e.currentTarget.value) }} defaultValue={endpoint} />
+            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                {
+                data.map((d: DataType) => (
+                    <MonitorGauge data={d} />
+                ))
+                }
+            </div>
+        </>
     );
 }
 export default ServerStatus;

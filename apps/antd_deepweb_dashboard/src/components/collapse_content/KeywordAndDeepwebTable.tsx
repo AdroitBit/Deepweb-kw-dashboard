@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Table } from 'antd';
+import { Input, Table } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
 
 interface DataType {
@@ -22,18 +22,12 @@ const columns: TableColumnsType<DataType> = [
 ];
 
 
-
-
-
-
-
 function KeywordAndDeepwebTable({ backend_url }: { backend_url: string }){
-  
   const [data, setData] = useState<DataType[]>([]);
+  const [endpoint, setEndpoint] = useState('/keyword_and_urls/antd/table');
   useEffect(() => {
     const fetchData = async () => {
-      // const response = await fetch('http://localhost:5000/keyword_and_urls/antd/table');
-      const response = await fetch(backend_url + '/keyword_and_urls/antd/table')
+      const response = await fetch(`${backend_url}${endpoint}`);
       const data = await response.json();
       setData(data);
     };
@@ -42,25 +36,25 @@ function KeywordAndDeepwebTable({ backend_url }: { backend_url: string }){
     setInterval(() => {
       fetchData();
     }, 1500);
-  }, [backend_url]);
+  }, [backend_url, endpoint]);
 
   const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
   };
-  // let data:DataType[]=[]; // dummy data
-  // for(let i=0;i<100;i++){
-  //   data.push({key:i,keyword:"keyword"+i,url:"url"+i});
-  // }
 
   return (
-      <Table
-        columns={columns}
-        dataSource={data}
-        onChange={onChange}
-        pagination={false}
-        scroll={{ y: "25vh" }}
-        showSorterTooltip={{ target: 'sorter-icon' }}
-      />
+      <>
+        <Input placeholder='endpoint' onInput={(e) => { setEndpoint(e.currentTarget.value) }} defaultValue={endpoint} />
+        <Table
+          columns={columns}
+          dataSource={data}
+          onChange={onChange}
+          pagination={false}
+          scroll={{ y: "25vh" }}
+          showSorterTooltip={{ target: 'sorter-icon' }}
+        />
+      </>
+      
   );
 }
 
