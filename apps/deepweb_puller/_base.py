@@ -51,7 +51,7 @@ async def _request_get_on_url(url:str,params:Dict[str,str],use_tor:bool=True) ->
                     content_type=response.headers.get('content-type','')
                     return ResponseResult(response.status,await response.read(),content_type,url)
         if use_tor==True:
-            async with aiohttp.ClientSession(connector=ProxyConnector.from_url(f'socks5://{_tor_proxy_ip}:9050')) as session:
+            async with aiohttp.ClientSession(connector=ProxyConnector.from_url(f'socks5://{_tor_proxy_ip}:12139')) as session:
             # async with aiohttp.ClientSession() as session:
                 async with session.get(url,params=params) as response:
                     content_type=response.headers.get('content-type','')
@@ -66,7 +66,7 @@ async def _request_post_on_url(url:str,data:Dict[str,Any]={},json:Dict[str,Any]=
     if use_tor==True:
         try:
             _tor_proxy_ip = socket.gethostbyname('tor_proxy')
-            connector=ProxyConnector.from_url(f'socks5://{_tor_proxy_ip}:9050')
+            connector=ProxyConnector.from_url(f'socks5://{_tor_proxy_ip}:12139')
         except socket.gaierror:
             print("Error:", "Failed to get the IP address of the tor proxy. torproxy container might not be started yet.")
             return ResponseResult()
