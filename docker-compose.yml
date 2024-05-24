@@ -13,7 +13,7 @@ services:
     networks:
       - my_network
     ports:
-      - "9050:12139"
+      - "12139:9050"
       - "9053:9053"
       - "9051:9051"
   deepweb_puller:
